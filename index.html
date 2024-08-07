@@ -98,7 +98,7 @@ input{
           <td>Total</td>
           <td></td>
           <td></td>
-          <td>0</td>
+          <td id="total_compra">0.00</td>
         </tr>
       </tfoot>
     </table>
@@ -107,7 +107,7 @@ input{
       <button id="b_editar" class="botoes" style="background-color:#ffff33">
         <img class="icone_editar" src="img/editar.png" alt="Editar">
       </button>
-      <button onclick="adc_button()" id="b_excluir" class="botoes" style="background-color:#ff3333">X</button>
+      <button id="b_excluir" class="botoes" style="background-color:#ff3333">X</button>
     </div>
   </main>
   
@@ -142,34 +142,79 @@ const avo = document.querySelector('#tbody');
     pai.appendChild(filho4);
   });
   
- b_excluir.addEventListener('click', () => {
+  let clickCount = 0;
+
+b_excluir.addEventListener('click', () => {
+   clickCount++;
    const linha = document.querySelectorAll('td');
-   const id = document.querySelectorAll('.id_produto');
-   linha.forEach(element => {
-     element.setAttribute('style', 'border-bottom:2px solid red');
-    });
-   b_excluir.disabled = true;
-   id.forEach(element => {
-     element.textContent = 'X'; 
-   });
+   const id_produto = document.querySelectorAll('.id_produto');
+
+   if (clickCount === 1) {
+     linha.forEach(element => {
+       element.setAttribute('style', 'border-bottom:2px solid red');
+     });
+     b_adicionar.disabled = true;
+
+     id_produto.forEach((element, index) => {
+       const button = document.createElement('button');
+       button.id = `b${index}`;
+       button.textContent = 'X';
+
+       button.addEventListener('click', () => {
+         const tr = button.closest('tr');
+         tr.parentNode.removeChild(tr);
+       });
+       element.parentNode.replaceChild(button, element);
+     });
+
+     const lix = document.createElement('button');
+     lix.setAttribute("class","b_lix");
+     const txt = document.createTextNode("X");
+     lix.appendChild(txt);
+     avo.replaceChild(lix, id_produto[0]); // assuming id_produto is a NodeList
+   } else if (clickCount === 2) {
+     // Remove the styling
+     linha.forEach(element => {
+       element.removeAttribute('style');
+     });
+     b_excluir.disabled = false;
+     b_adicionar.disabled = false;
+
+     // Restore the original IDs
+     id_produto.forEach((element, index) => {
+       const button = document.querySelector(`#b${index}`);
+       element.parentNode.replaceChild(element, button);
+     });
+
+     // Remove the "b_lix" button
+     const b_lix = document.querySelector('.b_lix');
+     if (b_lix) {
+       avo.replaceChild(id_produto[0], b_lix);
+     }
+
+     clickCount = 0; // Reset the click count
+   }
  });
  
-  function adc_button() {
-    var lix = document.createElement('button');
-    lix.setAttribute("class","b_lix");
-    var txt = document.createTextNode("X");
-    lix.appendChild(txt);
-    
-    id = document.querySelectorAll('.id_produto');
-    
-    avo.replaceChild(id_produto,lix.childNodes);
-  }
   function subtotal() {
-      const quant = document.querySelector('.inp_quant').value;
-      const preco = document.querySelector('.inp_preco').value;
-      const subtotal = document.querySelector('.p_subt');
-      
-      subtotal.textContent = preco * quant;
+    const rows = document.querySelectorAll('#tbody tr');
+    const total_compra = document.querySelector('#total_compra');
+    var total = 0;
+
+    rows.forEach(row => {
+      let quantInput = row.querySelector('.inp_quant');
+      let precoInput = row.querySelector('.inp_preco');
+      let subtotalElement = row.querySelector('.p_subt');
+
+
+      let quant = parseFloat(quantInput.value) || 0;
+      let preco = parseFloat(precoInput.value) || 0;
+      let subTotal = quant * preco;
+      total += subTotal;
+
+      subtotalElement.textContent = subTotal.toFixed(2);
+    });
+    total_compra.textContent = parseFloat(total);
 }
 
 </script>
