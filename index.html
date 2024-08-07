@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="CLedsonB">
+  <meta name="description" content="Website com o intuito de informar ao cliente o valor da compra em tempo real">
+  <meta name="keywords" content="compras, lista de compras, compras sob controle">
+  <meta name="robots" content="index,nofollow">
+  <meta name="rating" content="12 years"/>
+  <meta name="copyright" content="© 2024 - CLedsonB"/>
+
+  <link rel="icon" href="img/ic_banner.png">
+  <link rel="stylesheet" href="index.css" type="text/css" >
+
+
+       <title>Info Compras - Sua compra sob controle</title>
+</head>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    outline: none;    
+}
+body{
+  background-color: #000;
+  color: #fff;
+}
+header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+th, td{
+  text-align: center;
+  border-bottom: 2px solid #fff;
+  padding: 20px 0;
+}
+.edicao_tabela{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px
+}
+.botoes {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+}
+.icone_editar {
+  width: 40px;
+  padding: 5px;
+}
+input{
+  height: 30px;
+  width: 70px;
+  margin: 6px;
+  font-size: 16px;
+  text-align: center;
+  border: 2px solid red;
+  background-color: #000;
+  color: #fff;
+}
+</style>
+<body>
+  <header>
+    <img class="banner" src="img/ic_logo.png" alt="">
+  </header>
+  <main>
+    <table cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nome do Produto</th>
+          <th>Quantidade (Und.)</th>
+          <th>Preco (R$)</th>
+          <th>Subtotal (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr>
+          <td><p class="id_produto">1</p></td>
+          <td><input class="inp_produto" placeholder='produto'></td>
+          <td><input onblur='subtotal()' class="inp_quant" placeholder='0'></td>
+          <td><input onblur='subtotal()' class="inp_preco" placeholder='0.00'></td>
+          <td><p class='p_subt'>0</p></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>0</td>
+          <td>Total</td>
+          <td></td>
+          <td></td>
+          <td>0</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="edicao_tabela">
+      <button id="b_adicionar" class="botoes" style="background-color:#33ff33">+</button>
+      <button id="b_editar" class="botoes" style="background-color:#ffff33">
+        <img class="icone_editar" src="img/editar.png" alt="Editar">
+      </button>
+      <button onclick="adc_button()" id="b_excluir" class="botoes" style="background-color:#ff3333">X</button>
+    </div>
+  </main>
+  
+  <footer>
+    <p>Copyright © 2024 - CLedsonB</p>
+  </footer>
+</body>
+<script>
+const b_adicionar = document.querySelector('#b_adicionar');
+const id_produto = document.querySelector('.id_produto');
+const avo = document.querySelector('#tbody');
+
+  b_adicionar.addEventListener('click', () => {
+    const pai = document.createElement('tr');
+    const filho0 = document.createElement('td');
+    const filho1 = document.createElement('td');
+    const filho2 = document.createElement('td');
+    const filho3 = document.createElement('td');
+    const filho4 = document.createElement('td');
+    const id_num = Array.from(document.querySelectorAll(".id_produto")).length;
+    filho0.innerHTML += `<p class='id_produto'>${id_num+1}</p>`;
+    filho1.innerHTML += "<input class='inp_produto' placeholder='produto'>";
+    filho2.innerHTML += "<input onblur='subtotal()' class='inp_quant' placeholder='0'>";
+    filho3.innerHTML += "<input onblur='subtotal()' class='inp_preco' placeholder='0.00'>";
+    filho4.innerHTML += "<p class='p_subt'>0</p>";
+  
+    avo.appendChild(pai);
+    pai.appendChild(filho0)
+    pai.appendChild(filho1);
+    pai.appendChild(filho2);
+    pai.appendChild(filho3);
+    pai.appendChild(filho4);
+  });
+  
+ b_excluir.addEventListener('click', () => {
+   const linha = document.querySelectorAll('td');
+   const id = document.querySelectorAll('.id_produto');
+   linha.forEach(element => {
+     element.setAttribute('style', 'border-bottom:2px solid red');
+    });
+   b_excluir.disabled = true;
+   id.forEach(element => {
+     element.textContent = 'X'; 
+   });
+ });
+ 
+  function adc_button() {
+    var lix = document.createElement('button');
+    lix.setAttribute("class","b_lix");
+    var txt = document.createTextNode("X");
+    lix.appendChild(txt);
+    
+    id = document.querySelectorAll('.id_produto');
+    
+    avo.replaceChild(id_produto,lix.childNodes);
+  }
+  function subtotal() {
+      const quant = document.querySelector('.inp_quant').value;
+      const preco = document.querySelector('.inp_preco').value;
+      const subtotal = document.querySelector('.p_subt');
+      
+      subtotal.textContent = preco * quant;
+}
+
+</script>
+</html>
