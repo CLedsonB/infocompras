@@ -51,6 +51,7 @@ th, td{
 .botoes {
   width: 60px;
   height: 60px;
+  font-size: 34px;
   border-radius: 100%;
 }
 .icone_editar {
@@ -63,7 +64,6 @@ input{
   margin: 6px;
   font-size: 16px;
   text-align: center;
-  border: 2px solid red;
   background-color: #000;
   color: #fff;
 }
@@ -110,7 +110,7 @@ input{
       <button id="b_excluir" class="botoes" style="background-color:#ff3333">X</button>
     </div>
   </main>
-  
+
   <footer>
     <p>Copyright © 2024 - CLedsonB</p>
   </footer>
@@ -133,7 +133,7 @@ const avo = document.querySelector('#tbody');
     filho2.innerHTML += "<input onblur='subtotal()' class='inp_quant' placeholder='0'>";
     filho3.innerHTML += "<input onblur='subtotal()' class='inp_preco' placeholder='0.00'>";
     filho4.innerHTML += "<p class='p_subt'>0</p>";
-  
+
     avo.appendChild(pai);
     pai.appendChild(filho0)
     pai.appendChild(filho1);
@@ -141,7 +141,7 @@ const avo = document.querySelector('#tbody');
     pai.appendChild(filho3);
     pai.appendChild(filho4);
   });
-  
+
   let clickCount = 0;
 
 b_excluir.addEventListener('click', () => {
@@ -195,7 +195,7 @@ b_excluir.addEventListener('click', () => {
      clickCount = 0; // Reset the click count
    }
  });
- 
+
   function subtotal() {
     const rows = document.querySelectorAll('#tbody tr');
     const total_compra = document.querySelector('#total_compra');
